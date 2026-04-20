@@ -3,14 +3,14 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![100% open-source](https://img.shields.io/badge/deps-100%25%20open--source-success.svg)](#why-fully-open-source)
 
-Reproducible, 100% open-source *de novo* design of small-molecule agonists of the **melanocortin-4 receptor (MC4R)** that are biased for MC4R over MC1R, MC3R and MC5R. Built around [REINVENT 4](https://github.com/MolecularAI/REINVENT4) with custom structure-based scoring plugins, a four-receptor QSAR panel trained on ChEMBL, AutoDock Vina docking against five public cryo-EM structures, and OpenMM MD stability testing — no license-gated software anywhere in the pipeline.
+Extension of my previous publications on MC4R agonists. Design of small-molecule agonists of the **melanocortin-4 receptor (MC4R)** that are biased for MC4R over MC1R, MC3R and MC5R. Built around [REINVENT 4](https://github.com/MolecularAI/REINVENT4) with custom structure-based scoring plugins, a four-receptor QSAR panel trained on ChEMBL, AutoDock Vina docking against five public cryo-EM structures, and OpenMM MD stability testing.
 
 ## Install
 
 Dependencies are grouped into lightweight core + optional extras. The core
 is install-from-PyPI only (numpy / scipy / pandas / scikit-learn / lightgbm /
 rdkit / matplotlib / plotly / py3Dmol / biopython / requests / joblib /
-jinja2). Everything heavy or git-installed lives behind an extra.
+jinja2).
 
 ```bash
 pip install -e .                      # base (numerics + rdkit + reporting)
@@ -24,23 +24,6 @@ pip install -e ".[dev]"               # + ruff, mypy, pytest, hypothesis
 pip install -e ".[full]"              # everything above
 ```
 
-External command-line tools (not installable via pip): `antechamber` and
-`packmol-memgen` from AmberTools, ADFR's `prepare_receptor`, `gmx_MMPBSA`.
-GPU is optional — OpenMM falls back to CPU.
-
-## 50-line minimal example
-
-```python
-from pathlib import Path
-from mc4gen.pipeline.run_reinvent import run_reinvent_stage
-from mc4gen.pipeline.prioritize import run_prioritization
-
-config = Path("configs/stage_2_rl_7piu.toml")
-raw = run_reinvent_stage(config, output_dir=Path("runs/7piu"))
-final = run_prioritization(raw, max_candidates=10)
-for candidate in final:
-    print(candidate.smiles, candidate.predicted_pki_mc4r, candidate.vina_score)
-```
 
 ## Methods
 
@@ -65,15 +48,11 @@ for candidate in final:
 
 **Structure-ensemble averaging.** The Vina score is averaged across five independent MC4R cryo-EM structures (7AUE, 7PIU, 7PIV, 6W25, 7F53). Candidates are required to score well on at least two.
 
-## Why fully open-source
 
-Structure-based generative chemistry is dominated by commercial toolchains — Schrödinger, OpenEye, MOE — and published pipelines frequently assume institutional licenses worth five figures annually. `mc4gen` deliberately reimplements every step with permissively licensed alternatives: Vina for Glide, `gmx_MMPBSA` for Prime, `meeko`/`dimorphite-dl` for LigPrep, RDKit for CORINA/OMEGA, PLIP for GRID. The result is slower and occasionally noisier than the commercial stack — we document that honestly — but it runs on a fresh clone in any research group worldwide with nothing more than a Python environment and internet access.
+## Limitations
 
-## Honest limitations
-
-- Vina rank-ordering is noisier than Glide SP; we mitigate with ensemble averaging over five structures but report the Spearman correlation to experimental pKi on held-out MC4R actives prominently.
+- Vina rank-ordering is noisier than Glide SP; I mitigate with ensemble averaging over five structures but report the Spearman correlation to experimental pKi on held-out MC4R actives prominently.
 - The QSAR panel is bounded by ChEMBL coverage. MC3R and MC5R datasets are smaller and their applicability domains narrower; we flag out-of-domain predictions and exclude them from headline claims.
-- **No wet-lab validation.** Every candidate is a computational hypothesis.
 - **Biased signaling is not predicted.** Setmelanotide's Gq/11 vs. Gs bias is a functional property not captured by structure-based scoring; `mc4gen` does not attempt to score bias.
 - Docking pose ↔ functional agonism is an unvalidated assumption for any structure-based generative protocol, commercial or not.
 
