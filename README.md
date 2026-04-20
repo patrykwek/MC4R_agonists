@@ -1,8 +1,5 @@
 # mc4gen
 
-[![CI](https://github.com/owner/mc4gen/actions/workflows/ci.yml/badge.svg)](https://github.com/owner/mc4gen/actions/workflows/ci.yml)
-[![PyPI](https://img.shields.io/pypi/v/mc4gen.svg)](https://pypi.org/project/mc4gen/)
-[![mypy: strict](https://img.shields.io/badge/mypy-strict-blue.svg)](https://mypy.readthedocs.io/en/stable/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![100% open-source](https://img.shields.io/badge/deps-100%25%20open--source-success.svg)](#why-fully-open-source)
 
@@ -10,14 +7,26 @@ Reproducible, 100% open-source *de novo* design of small-molecule agonists of th
 
 ## Install
 
+Dependencies are grouped into lightweight core + optional extras. The core
+is install-from-PyPI only (numpy / scipy / pandas / scikit-learn / lightgbm /
+rdkit / matplotlib / plotly / py3Dmol / biopython / requests / joblib /
+jinja2). Everything heavy or git-installed lives behind an extra.
+
 ```bash
-pip install mc4gen            # base
-pip install "mc4gen[app]"     # + Streamlit companion
-pip install "mc4gen[dev]"     # + test & lint stack
-pip install "mc4gen[rascore]" # + RAscore (git install)
+pip install -e .                      # base (numerics + rdkit + reporting)
+pip install -e ".[docking]"           # + AutoDock Vina, meeko, PLIP, ProLIF
+pip install -e ".[md]"                # + OpenMM, pdbfixer, MDAnalysis, propka
+pip install -e ".[reinvent]"          # + REINVENT 4 (git) + ChemProp
+pip install -e ".[retrosynth]"        # + AiZynthFinder
+pip install -e ".[rascore]"           # + RAscore (git)
+pip install -e ".[app]"               # + Streamlit companion
+pip install -e ".[dev]"               # + ruff, mypy, pytest, hypothesis
+pip install -e ".[full]"              # everything above
 ```
 
-External command-line tools that must be on `$PATH`: `antechamber`, `packmol-memgen` (both from AmberTools). GPU is optional — OpenMM falls back to CPU.
+External command-line tools (not installable via pip): `antechamber` and
+`packmol-memgen` from AmberTools, ADFR's `prepare_receptor`, `gmx_MMPBSA`.
+GPU is optional — OpenMM falls back to CPU.
 
 ## 50-line minimal example
 
