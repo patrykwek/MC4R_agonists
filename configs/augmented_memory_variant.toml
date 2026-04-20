@@ -1,0 +1,54 @@
+run_type = "staged_learning"
+device = "cuda:0"
+tb_logdir = "runs/tb/augmem"
+json_out_config = "runs/augmem/config.json"
+
+[parameters]
+prior_file = "priors/reinvent.prior"
+agent_file = "runs/stage_1_tl/focused.prior"
+summary_csv_prefix = "runs/augmem/progress"
+batch_size = 128
+unique_sequences = true
+randomize_smiles = true
+
+[learning_strategy]
+type = "augmented_memory"
+sigma = 128.0
+rate = 0.0001
+augmented_memory_size = 3
+augmentation_rounds = 2
+
+[diversity_filter]
+type = "IdenticalMurckoScaffold"
+bucket_size = 25
+minscore = 0.4
+minsimilarity = 0.4
+
+[[stage]]
+max_score = 1.0
+max_steps = 100
+chkpt_file = "runs/augmem/agent.chkpt"
+
+[stage.termination]
+type = "simple"
+
+[stage.scoring]
+type = "geometric_mean"
+
+[[stage.scoring.component]]
+type = "custom_product"
+name = "mc4r_docking_vina"
+
+[stage.scoring.component.endpoint]
+name = "mc4r_docking_vina"
+weight = 1.0
+params = { pdb_ids = ["7PIU"], target_kcal = -9.0 }
+
+[[stage.scoring.component]]
+type = "custom_product"
+name = "selectivity"
+
+[stage.scoring.component.endpoint]
+name = "melanocortin_selectivity"
+weight = 1.0
+params = { panel_path = "artifacts/qsar_panel.joblib", min_pki_mc4r = 7.0, min_selectivity_mc1r = 2.0 }

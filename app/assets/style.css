@@ -1,0 +1,6 @@
+html, body, [class*="stApp"] {
+    font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+}
+.stAlert { border-radius: 6px; }
+div[data-testid="stMetricValue"] { font-variant-numeric: tabular-nums; }
+.block-container { padding-top: 2rem; padding-bottom: 4rem; }

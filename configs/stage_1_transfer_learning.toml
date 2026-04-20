@@ -1,0 +1,17 @@
+run_type = "transfer_learning"
+device = "cuda:0"
+tb_logdir = "runs/tb/stage_1_tl"
+json_out_config = "runs/stage_1_tl/config.json"
+
+[parameters]
+num_epochs = 10
+batch_size = 256
+sample_batch_size = 128
+num_refs = 0
+save_every_n_epochs = 1
+starting_epoch = 1
+shuffle_each_epoch = true
+output_model_file = "runs/stage_1_tl/focused.prior"
+input_model_file = "priors/reinvent.prior"
+smiles_file = "data/mc4r_focused_train.smi"
+validation_smiles_file = "data/mc4r_focused_val.smi"

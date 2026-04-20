@@ -1,0 +1,39 @@
+- name: piperazine_THIQ_MB7
+  smarts: "N1CCN(CC1)Cc1ccc2[CH2][CH2][NH][CH2]c2c1"
+  description: "Piperazine + tetrahydroisoquinoline (THIQ / MB7) class."
+  reference: "Sebhat et al. 2002; Merck MB7 series."
+
+- name: tetrahydroisoquinoline_core
+  smarts: "c1ccc2CCNCc2c1"
+  description: "Bare THIQ scaffold, shared by many MC4R agonists."
+  reference: "Bondebjerg et al. 2003."
+
+- name: pyrrolidine_ML00253764
+  smarts: "N1CCC(C1)N"
+  description: "Pyrrolidine-derived ML00253764 series."
+  reference: "Vos et al. 2004."
+
+- name: bicyclic_spiroindoline
+  smarts: "C12([NH]C3=CC=CC=C13)CCCC2"
+  description: "Setmelanotide-like spiroindoline ring fragment."
+  reference: "Chen et al. 2015; Rhythm Pharmaceuticals."
+
+- name: morpholine_sulfonamide
+  smarts: "O=S(=O)(N)N1CCOCC1"
+  description: "Merck morpholine sulfonamide series."
+  reference: "Ye et al. 2010."
+
+- name: diaminopropyl_template
+  smarts: "NCCCN"
+  description: "Linear diaminopropyl template often seen in early MC4R agonists."
+  reference: "Richardson et al. 2004."
+
+- name: benzamide_alpha_MSH_mimic
+  smarts: "c1ccc(cc1)C(=O)N[CH2][CH2][NH]"
+  description: "Benzamide-containing alpha-MSH peptide mimic."
+  reference: "Cai et al. 2008."
+
+- name: imidazopyridine_THIQ_hybrid
+  smarts: "c1ccc2ncnc2c1-c1ccc2CCNCc2c1"
+  description: "Imidazopyridine / THIQ hybrid (Palatin series)."
+  reference: "Palatin MT-II derivatives."
